@@ -1,0 +1,8 @@
+﻿---
+BreakBeforeBraces: Allman
+ColumnLimit: '110'
+IncludeBlocks: Preserve
+Language: Cpp
+NamespaceIndentation: All
+
+...
