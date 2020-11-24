@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <assert.h>
 #include <fstream>
 #include <iostream>
@@ -65,6 +66,50 @@ Record makeRecord(const std::vector<std::string> &x)
   return r;
 }
 
+std::vector<Record> makeRecords(const std::vector<std::string> &x)
+{
+  std::vector<Record> records;
+
+  auto it = x.begin();
+  while (it != x.end())
+  {
+    try
+    {
+      Record r;
+
+      constexpr auto numElevationsOffset = 2;
+      auto numElevationsIt = it + numElevationsOffset;
+      const auto &numElevationsStr = *numElevationsIt;
+      const auto numElevations = std::stoi(numElevationsStr);
+
+      r.numElevations = numElevations;
+
+      std::vector<double> elevations;
+
+      constexpr auto elevationsOffset = 9;
+      auto beginIt = it + elevationsOffset;
+      auto endIt = beginIt + numElevations;
+      std::transform(beginIt, endIt, std::back_inserter(elevations),
+                     [](const auto &x) { return std::stoi(x); });
+
+      r.elevations = elevations;
+      //   r.dump();
+
+      records.push_back(r);
+
+      it = endIt + 1;
+
+      std::cout << "reiterating at " << std::distance(x.begin(), it) << std::endl;
+    }
+    catch (const std::exception &e)
+    {
+      std::cerr << e.what() << '\n';
+    }
+  }
+
+  return records;
+}
+
 std::vector<std::string> split(const std::string &x, bool dump = false)
 {
   std::stringstream ss(x);
@@ -86,47 +131,26 @@ int main(int argc, char *argv[])
   std::vector<Record> records;
 
   const auto terrainPath = "../terrain/test_big.dem";
-  std::ifstream ifs(terrainPath, std::ios::in | std::ios::binary);
+  std::ifstream ifs(terrainPath, std::ios::in);
   if (ifs.is_open() == true)
   {
     // Records are in multiples of 1024 bytes
     constexpr auto bufferSize = 1024;
-    char buffer[bufferSize];
 
     // Skip the "A" Record
     ifs.seekg(bufferSize);
 
-    do
+    std::vector<std::string> contents;
+
+    for (std::string line; std::getline(ifs, line);)
     {
-      ifs.read(&buffer[0], bufferSize);
-      auto tokens = split(buffer);
-      auto record = makeRecord(tokens);
-      if (record.isValid() == false)
-      {
-        auto multiple = 1;
-        const auto expectedStartPosition = ifs.tellg() - bufferSize;
-        std::cout << expectedStartPosition << std::endl;
+      const auto tokens = split(line);
+      std::copy(tokens.begin(), tokens.end(), std::back_inserter(contents));
+    }
 
-        while (record.isValid() == false)
-        {
-          record.dump();
+    std::ofstream ofs("dump.txt");
+    std::copy(contents.begin(), contents.end(), std::ostream_iterator<std::string>(ofs, "\n"));
 
-          const auto filePosition = ifs.tellg();
-          const auto backFilePosition = filePosition - (bufferSize * multiple);
-          std::cout << backFilePosition << std::endl;
-          assert(backFilePosition >= 0 && expectedStartPosition == backFilePosition);
-          ifs.seekg(backFilePosition);
-
-          const auto bigBufferSize = bufferSize * ++multiple;
-          char bigBuffer[bigBufferSize];
-          ifs.read(&bigBuffer[0], bigBufferSize);
-          tokens = split(bigBuffer);
-          record = makeRecord(tokens);
-        }
-      }
-
-      records.push_back(record);
-
-    } while (ifs.gcount() > 0);
+    const auto records = makeRecords(contents);
   }
 }
