@@ -1,6 +1,6 @@
 ﻿---
 BreakBeforeBraces: Allman
-ColumnLimit: '110'
+ColumnLimit: '100'
 IncludeBlocks: Preserve
 Language: Cpp
 NamespaceIndentation: All
