@@ -12,7 +12,6 @@ struct Record
   void dump(std::ostream& stream, bool verbose = false) const;
 
   static std::vector<Record> MakeRecords(const std::vector<std::string>& x);
-  template <class T> static std::optional<T> stringTo(const std::string& x);
 
   std::vector<double> elevations;
   double beginLatitude{-1.0};

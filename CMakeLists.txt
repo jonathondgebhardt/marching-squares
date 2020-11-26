@@ -25,11 +25,13 @@ endif()
 
 set(SOURCE_H
     src/Record.hpp
+    src/DEMParser.ipp
 )
 
 set(SOURCE
     src/main.cpp
     src/Record.cpp
+    src/DEMParser.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE_H} ${SOURCE})

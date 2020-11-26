@@ -6,4 +6,5 @@ Language: Cpp
 NamespaceIndentation: All
 DerivePointerAlignment: false
 PointerAlignment: Left
+SpaceBeforeParens: Never
 ...
