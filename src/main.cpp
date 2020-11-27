@@ -1,9 +1,6 @@
-#include "DEMParser.ipp"
-#include "Record.hpp"
-#include <fstream>
+#include <DEMParser.ipp>
+#include <Record.hpp>
 #include <iostream>
-#include <iterator>
-#include <sstream>
 #include <string>
 #include <vector>
 
