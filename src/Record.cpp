@@ -8,18 +8,36 @@
 
 bool Record::isValid() const
 {
-  const auto elevationsMatch = this->elevations.size() == this->numElevations;
+  if(this->elevations.empty())
+  {
+    return false;
+  }
 
-  const auto [minIt, maxIt] = std::minmax_element(this->elevations.begin(), this->elevations.end());
+  return this->numElevationsMatch() && this->minElevationsMatch() && maxElevationsMatch();
+}
 
-  const auto doubleEquals = [](double x, double y) -> bool {
-    return std::fabs(x - y) < std::numeric_limits<double>::epsilon();
-  };
+bool Record::numElevationsMatch() const { return this->elevations.size() == this->numElevations; }
 
-  const auto maxElevationMatch = doubleEquals(this->maximumElevation, *maxIt);
-  const auto minElevationMatch = doubleEquals(this->minimumElevation, *minIt);
+bool Record::minElevationsMatch() const
+{
+  const auto minIt = std::min_element(this->elevations.begin(), this->elevations.end());
+  if(minIt != this->elevations.end())
+  {
+    return this->doubleEquals(this->minimumElevation, *minIt);
+  }
 
-  return elevationsMatch && maxElevationMatch && minElevationMatch;
+  return false;
+}
+
+bool Record::maxElevationsMatch() const
+{
+  const auto maxIt = std::max_element(this->elevations.begin(), this->elevations.end());
+  if(maxIt != this->elevations.end())
+  {
+    return this->doubleEquals(this->maximumElevation, *maxIt);
+  }
+
+  return false;
 }
 
 void Record::dump(std::ostream& os, bool verbose) const

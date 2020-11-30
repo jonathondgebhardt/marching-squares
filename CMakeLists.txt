@@ -12,12 +12,17 @@ set(SOURCE_H
 )
 
 set(SOURCE
-    src/main.cpp
     src/Record.cpp
     src/DEMParser.cpp
 )
 
+set(SOURCE_TEST
+    src/test/Record.test.cpp
+)
 
 add_executable(${PROJECT_NAME} ${SOURCE_H} src/main.cpp ${SOURCE})
 
-add_subdirectory(src/test)
+find_package(GTest CONFIG REQUIRED)
+set(TEST_EXECUTABLE ${PROJECT_NAME}_test)
+add_executable(${TEST_EXECUTABLE} ${SOURCE_H} src/test/main.cpp ${SOURCE} ${SOURCE_TEST})
+target_link_libraries(${TEST_EXECUTABLE} gtest gtest_main)
