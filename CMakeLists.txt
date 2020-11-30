@@ -17,6 +17,7 @@ set(SOURCE
     src/DEMParser.cpp
 )
 
-add_executable(${PROJECT_NAME} ${SOURCE_H} ${SOURCE})
+
+add_executable(${PROJECT_NAME} ${SOURCE_H} src/main.cpp ${SOURCE})
 
 add_subdirectory(src/test)
