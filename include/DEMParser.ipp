@@ -1,12 +1,11 @@
 #pragma once
 
+#include <Record.hpp>
 #include <iostream>
+#include <optional>
 #include <sstream>
 #include <string>
-#include <utility>
 #include <vector>
-
-#include "Record.hpp"
 
 class DEMParser
 {

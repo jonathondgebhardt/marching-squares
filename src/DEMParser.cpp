@@ -1,5 +1,7 @@
-#include "DEMParser.ipp"
+#include <DEMParser.ipp>
 
+#include <algorithm>
+#include <cmath>
 #include <fstream>
 #include <iterator>
 
