@@ -16,13 +16,11 @@ set(SOURCE
     src/DEMParser.cpp
 )
 
-set(SOURCE_TEST
-    src/test/Record.test.cpp
-)
 
 add_executable(${PROJECT_NAME} ${SOURCE_H} src/main.cpp ${SOURCE})
 
 find_package(GTest CONFIG REQUIRED)
-set(TEST_EXECUTABLE ${PROJECT_NAME}_test)
-add_executable(${TEST_EXECUTABLE} ${SOURCE_H} src/test/main.cpp ${SOURCE} ${SOURCE_TEST})
-target_link_libraries(${TEST_EXECUTABLE} gtest gtest_main)
+
+set(RECORD_TEST record_test)
+add_executable(${RECORD_TEST} ${SOURCE_H} src/test/main.cpp ${SOURCE} src/test/Record.test.cpp)
+target_link_libraries(${RECORD_TEST} gtest gtest_main)
